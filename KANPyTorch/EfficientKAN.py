@@ -24,6 +24,7 @@ class KANLinear(torch.nn.Module):
         self.grid_size = grid_size
         self.spline_order = spline_order
 
+        # 構建網格點
         h = (grid_range[1] - grid_range[0]) / grid_size
         grid = (
             (
@@ -35,6 +36,7 @@ class KANLinear(torch.nn.Module):
         )
         self.register_buffer("grid", grid)
 
+        # 初始化基礎權重和樣條權重
         self.base_weight = torch.nn.Parameter(torch.Tensor(out_features, in_features))
         self.spline_weight = torch.nn.Parameter(
             torch.Tensor(out_features, in_features, grid_size + spline_order)
@@ -54,8 +56,10 @@ class KANLinear(torch.nn.Module):
         self.reset_parameters()
 
     def reset_parameters(self):
+        # 用 Kaiming 初始化基礎權重,加入尺度因子
         torch.nn.init.kaiming_uniform_(self.base_weight, a=math.sqrt(5) * self.scale_base)
         with torch.no_grad():
+            # 用小的隨機噪聲初始化樣條權重
             noise = (
                     (
                             torch.rand(self.grid_size + 1, self.in_features, self.out_features)
@@ -72,18 +76,17 @@ class KANLinear(torch.nn.Module):
                 )
             )
             if self.enable_standalone_scale_spline:
-                # torch.nn.init.constant_(self.spline_scaler, self.scale_spline)
                 torch.nn.init.kaiming_uniform_(self.spline_scaler, a=math.sqrt(5) * self.scale_spline)
 
     def b_splines(self, x: torch.Tensor):
         """
-        Compute the B-spline bases for the given input tensor.
+        計算給定輸入張量的 B 樣條基函數
 
         Args:
-            x (torch.Tensor): Input tensor of shape (batch_size, in_features).
+            x (torch.Tensor): 形狀為 (batch_size, in_features) 的輸入張量
 
         Returns:
-            torch.Tensor: B-spline bases tensor of shape (batch_size, in_features, grid_size + spline_order).
+            torch.Tensor: 形狀為 (batch_size, in_features, grid_size + spline_order) 的 B 樣條基函數張量
         """
         assert x.dim() == 2 and x.size(1) == self.in_features
 
@@ -112,14 +115,14 @@ class KANLinear(torch.nn.Module):
 
     def curve2coeff(self, x: torch.Tensor, y: torch.Tensor):
         """
-        Compute the coefficients of the curve that interpolates the given points.
+        計算插值給定點的曲線的係數
 
         Args:
-            x (torch.Tensor): Input tensor of shape (batch_size, in_features).
-            y (torch.Tensor): Output tensor of shape (batch_size, in_features, out_features).
+            x (torch.Tensor): 形狀為 (batch_size, in_features) 的輸入張量
+            y (torch.Tensor): 形狀為 (batch_size, in_features, out_features) 的輸出張量
 
         Returns:
-            torch.Tensor: Coefficients tensor of shape (out_features, in_features, grid_size + spline_order).
+            torch.Tensor: 形狀為 (out_features, in_features, grid_size + spline_order) 的係數張量
         """
         assert x.dim() == 2 and x.size(1) == self.in_features
         assert y.size() == (x.size(0), self.in_features, self.out_features)
@@ -144,6 +147,7 @@ class KANLinear(torch.nn.Module):
 
     @property
     def scaled_spline_weight(self):
+        # 返回經過尺度變換的樣條權重
         return self.spline_weight * (
             self.spline_scaler.unsqueeze(-1)
             if self.enable_standalone_scale_spline
@@ -153,6 +157,7 @@ class KANLinear(torch.nn.Module):
     def forward(self, x: torch.Tensor):
         assert x.dim() == 2 and x.size(1) == self.in_features
 
+        # 計算基礎部分和樣條部分的輸出,並相加
         base_output = F.linear(self.base_activation(x), self.base_weight)
         spline_output = F.linear(
             self.b_splines(x).view(x.size(0), -1),
@@ -162,6 +167,9 @@ class KANLinear(torch.nn.Module):
 
     @torch.no_grad()
     def update_grid(self, x: torch.Tensor, margin=0.01):
+        """
+        基於輸入數據更新網格點
+        """
         assert x.dim() == 2 and x.size(1) == self.in_features
         batch = x.size(0)
 
@@ -174,7 +182,7 @@ class KANLinear(torch.nn.Module):
             1, 0, 2
         )  # (batch, in, out)
 
-        # sort each channel individually to collect data distribution
+        # 對每個通道單獨排序以收集數據分佈
         x_sorted = torch.sort(x, dim=0)[0]
         grid_adaptive = x_sorted[
             torch.linspace(
@@ -192,6 +200,7 @@ class KANLinear(torch.nn.Module):
                 - margin
         )
 
+        # 計算新的網格點
         grid = self.grid_eps * grid_uniform + (1 - self.grid_eps) * grid_adaptive
         grid = torch.concatenate(
             [
@@ -211,16 +220,14 @@ class KANLinear(torch.nn.Module):
 
     def regularization_loss(self, regularize_activation=1.0, regularize_entropy=1.0):
         """
-        Compute the regularization loss.
+        計算正則化損失
 
-        This is a dumb simulation of the original L1 regularization as stated in the
-        paper, since the original one requires computing absolutes and entropy from the
-        expanded (batch, in_features, out_features) intermediate tensor, which is hidden
-        behind the F.linear function if we want an memory efficient implementation.
+        這是對原文中提到的 L1 正則化的一個簡化模擬,因為原版需要從展開的
+        (batch, in_features, out_features) 中間張量計算絕對值和熵,
+        如果我們想要一個內存高效的實現,這個中間張量會被隱藏在 F.linear 函數後面。
 
-        The L1 regularization is now computed as mean absolute value of the spline
-        weights. The authors implementation also includes this term in addition to the
-        sample-based regularization.
+        L1 正則化現在被計算為樣條權重的平均絕對值。作者的實現中除了基於樣本的正則化外,
+        也包括了這一項。
         """
         l1_fake = self.spline_weight.abs().mean(-1)
         regularization_loss_activation = l1_fake.sum()
@@ -249,6 +256,7 @@ class KAN(torch.nn.Module):
         self.grid_size = grid_size
         self.spline_order = spline_order
 
+        # 構建 KAN 的層
         self.layers = torch.nn.ModuleList()
         for in_features, out_features in zip(layers_hidden, layers_hidden[1:]):
             self.layers.append(
@@ -267,6 +275,7 @@ class KAN(torch.nn.Module):
             )
 
     def forward(self, x: torch.Tensor, update_grid=False):
+        # 前向傳播,可選擇是否更新網格點
         for layer in self.layers:
             if update_grid:
                 layer.update_grid(x)
@@ -274,6 +283,7 @@ class KAN(torch.nn.Module):
         return x
 
     def regularization_loss(self, regularize_activation=1.0, regularize_entropy=1.0):
+        # 計算所有層的正則化損失之和
         return sum(
             layer.regularization_loss(regularize_activation, regularize_entropy)
             for layer in self.layers
