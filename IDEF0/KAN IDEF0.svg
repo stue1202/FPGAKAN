@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<!-- 由 Microsoft Visio, SVG Export 產生 KAN.svg Page-1 -->
+<!-- 由 Microsoft Visio, SVG Export 產生 KAN IDEF0.svg Page-1 -->
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:ev="http://www.w3.org/2001/xml-events"
 		xmlns:v="http://schemas.microsoft.com/visio/2003/SVGExtensions/" width="8.26772in" height="11.6929in"
-		viewBox="0 0 595.276 841.89" xml:space="preserve" color-interpolation-filters="sRGB" class="st13">
+		viewBox="0 0 595.276 841.89" xml:space="preserve" color-interpolation-filters="sRGB" class="st14">
 	<v:documentProperties v:langID="1028" v:metric="true" v:viewMarkup="false">
 		<v:userDefs>
 			<v:ud v:nameU="msvNoAutoConnect" v:val="VT0(1):26"/>
@@ -25,7 +25,8 @@
 		.st10 {marker-end:url(#mrkr4-167);stroke:#000000;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.2376}
 		.st11 {fill:#000000;fill-opacity:1;stroke:#000000;stroke-opacity:1;stroke-width:0.086161879895561}
 		.st12 {fill:none;stroke:none;stroke-linecap:round;stroke-linejoin:round;stroke-width:0.75}
-		.st13 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
+		.st13 {font-size:1em;text-decoration:underline}
+		.st14 {fill:none;fill-rule:evenodd;font-size:12px;overflow:visible;stroke-linecap:square;stroke-miterlimit:3}
 	]]>
 	</style>
 
@@ -56,12 +57,12 @@
 			</v:userDefs>
 			<rect x="0" y="722.835" width="249.449" height="119.055" class="st1"/>
 		</g>
-		<g id="shape124-3" v:mID="124" v:groupContext="shape" transform="translate(56.6929,-277.795)">
+		<g id="shape124-3" v:mID="124" v:groupContext="shape" transform="translate(59.5276,-277.795)">
 			<title>方塊.124</title>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
 			</v:userDefs>
-			<rect x="0" y="722.835" width="481.89" height="119.055" class="st1"/>
+			<rect x="0" y="722.835" width="476.22" height="119.055" class="st1"/>
 		</g>
 		<g id="shape64-5" v:mID="64" v:groupContext="shape" transform="translate(79.3701,-476.22)">
 			<title>方塊</title>
@@ -321,9 +322,9 @@
 				<text x="13.45" y="816.55" class="st7" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>Regularization <tspan
 							x="10.16" dy="1.2em" class="st8">Loss Calculation</tspan></text>			</g>
 		</g>
-		<g id="shape139-76" v:mID="139" v:groupContext="shape" transform="translate(901.876,864.949) rotate(129.806)">
+		<g id="shape139-76" v:mID="139" v:groupContext="shape" transform="translate(909.473,855.7) rotate(128.991)">
 			<title>工作表.139</title>
-			<path d="M0 841.89 L309.95 841.89" class="st9"/>
+			<path d="M0 841.89 L306.35 841.89" class="st9"/>
 		</g>
 		<g id="shape143-79" v:mID="143" v:groupContext="shape" transform="translate(805.667,41.9565) rotate(59.6209)">
 			<title>工作表.143</title>
@@ -610,9 +611,9 @@
 			<title>工作表.135</title>
 			<path d="M0 841.89 L222.26 841.89" class="st9"/>
 		</g>
-		<g id="shape138-153" v:mID="138" v:groupContext="shape" transform="translate(813.321,899.52) rotate(138.468)">
+		<g id="shape138-153" v:mID="138" v:groupContext="shape" transform="translate(822.345,891.411) rotate(137.643)">
 			<title>工作表.138</title>
-			<path d="M0 841.89 L265.07 841.89" class="st9"/>
+			<path d="M0 841.89 L260.85 841.89" class="st9"/>
 		</g>
 		<g id="shape140-156" v:mID="140" v:groupContext="shape" transform="translate(898.36,-360.937) rotate(41.5318)">
 			<title>工作表.140</title>
@@ -876,25 +877,161 @@
 			</v:userDefs>
 			<path d="M0 841.89 L28.5 841.89" class="st10"/>
 		</g>
-		<g id="shape186-275" v:mID="186" v:groupContext="shape" transform="translate(110.551,-692.362)">
+		<g id="shape186-275" v:mID="186" v:groupContext="shape" transform="translate(130.394,-686.339)">
 			<title>文字區塊 8pt</title>
-			<desc>VARIABLE INPUT</desc>
+			<desc>Demand Input</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
-			<v:textRect cx="31.1811" cy="831.26" width="62.37" height="21.2598"/>
-			<rect x="0" y="820.63" width="62.3622" height="21.2598" class="st12"/>
-			<text x="2" y="833.66" class="st6" v:langID="1028"><v:paragraph/><v:tabList/>VARIABLE INPUT</text>		</g>
-		<g id="shape187-278" v:mID="187" v:groupContext="shape" transform="translate(429.449,-692.362)">
+			<v:textRect cx="17.7165" cy="825.236" width="35.44" height="33.3071"/>
+			<rect x="0" y="808.583" width="35.4331" height="33.3071" class="st12"/>
+			<text x="2" y="822.84" class="st6" v:langID="1028"><v:paragraph/><v:tabList/>Demand <tspan x="2" dy="1.2em" class="st8">Input</tspan></text>		</g>
+		<g id="shape187-279" v:mID="187" v:groupContext="shape" transform="translate(429.449,-692.362)">
 			<title>文字區塊 8pt.187</title>
-			<desc>MODEL OUTPUT</desc>
+			<desc>Model Output, Training Loss</desc>
 			<v:userDefs>
 				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
 			</v:userDefs>
 			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
-			<v:textRect cx="31.8898" cy="831.26" width="63.78" height="21.2598"/>
-			<rect x="0" y="820.63" width="63.7795" height="21.2598" class="st12"/>
-			<text x="2" y="833.66" class="st6" v:langID="1028"><v:paragraph/><v:tabList/>MODEL OUTPUT</text>		</g>
+			<v:textRect cx="29.0551" cy="831.26" width="58.12" height="21.2598"/>
+			<rect x="0" y="820.63" width="58.1102" height="21.2598" class="st12"/>
+			<text x="2" y="828.86" class="st6" v:langID="1028"><v:paragraph/><v:tabList/>Model Output,  <tspan x="2" dy="1.2em"
+						class="st8">Training Loss</tspan></text>		</g>
+		<g id="shape188-283" v:mID="188" v:groupContext="shape" transform="translate(217.559,-742.677)">
+			<title>文字區塊 8pt.188</title>
+			<desc>CONTROL Layer Configuration, Grid Size, Spline Order, Scaling...</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="80.0787" cy="825.236" width="160.16" height="33.3071"/>
+			<rect x="0" y="808.583" width="160.157" height="33.3071" class="st12"/>
+			<text x="64.26" y="813.24" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/><tspan class="st13">CONTROL</tspan><v:newlineChar/><tspan
+						x="8.86" dy="1.2em" class="st8" v:langID="1033">Layer Configuration, Grid Size, Spline Order, </tspan><tspan
+						x="6.13" dy="1.2em" class="st8" v:langID="1033">Scaling Parameters, Base Activation Function, </tspan><tspan
+						x="40.55" dy="1.2em" class="st8" v:langID="1033">Grid Update Parameters</tspan></text>		</g>
+		<g id="shape189-290" v:mID="189" v:groupContext="shape" transform="translate(250.778,-634.961)">
+			<title>文字區塊 8pt.189</title>
+			<desc>MECHANISM PyTorch, KANLinear Class</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="46.8602" cy="831.26" width="93.73" height="21.2598"/>
+			<rect x="0" y="820.63" width="93.7205" height="21.2598" class="st12"/>
+			<text x="25.7" y="828.86" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/><tspan class="st13">MECHANISM</tspan><v:newlineChar/><tspan
+						x="5.86" dy="1.2em" class="st8">PyTorch, KANLinear Class</tspan></text>		</g>
+		<g id="shape206-295" v:mID="206" v:groupContext="shape" transform="translate(35.4331,-522.992)">
+			<title>文字區塊 8pt.206</title>
+			<desc>Demand</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="17.7165" cy="831.26" width="35.44" height="21.2598"/>
+			<rect x="0" y="820.63" width="35.4331" height="21.2598" class="st12"/>
+			<text x="3.95" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>Demand</text>		</g>
+		<g id="shape207-298" v:mID="207" v:groupContext="shape" transform="translate(533.622,-522.992)">
+			<title>文字區塊 8pt.207</title>
+			<desc>Loss</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="13.1102" cy="831.26" width="26.23" height="21.2598"/>
+			<rect x="0" y="820.63" width="26.2205" height="21.2598" class="st12"/>
+			<text x="6.19" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>Loss</text>		</g>
+		<g id="shape208-301" v:mID="208" v:groupContext="shape" transform="translate(189.213,-561.26)">
+			<title>文字區塊 8pt.208</title>
+			<desc>Initialized KAN</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="29.0551" cy="831.26" width="58.12" height="21.2598"/>
+			<rect x="0" y="820.63" width="58.1102" height="21.2598" class="st12"/>
+			<text x="5.47" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>Initialized KAN</text>		</g>
+		<g id="shape209-304" v:mID="209" v:groupContext="shape" transform="translate(347.953,-561.26)">
+			<title>文字區塊 8pt.209</title>
+			<desc>Trained Model</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="29.0551" cy="831.26" width="58.12" height="21.2598"/>
+			<rect x="0" y="820.63" width="58.1102" height="21.2598" class="st12"/>
+			<text x="5.24" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>Trained Model</text>		</g>
+		<g id="shape210-307" v:mID="210" v:groupContext="shape" transform="translate(35.4331,-324.567)">
+			<title>文字區塊 8pt.210</title>
+			<desc>KAN</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="13.1102" cy="831.26" width="26.23" height="21.2598"/>
+			<rect x="0" y="820.63" width="26.2205" height="21.2598" class="st12"/>
+			<text x="6.14" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>KAN</text>		</g>
+		<g id="shape211-310" v:mID="211" v:groupContext="shape" transform="translate(539.291,-324.567)">
+			<title>文字區塊 8pt.211</title>
+			<desc>MD</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="10.2756" cy="831.26" width="20.56" height="21.2598"/>
+			<rect x="0" y="820.63" width="20.5512" height="21.2598" class="st12"/>
+			<text x="4.39" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>MD</text>		</g>
+		<g id="shape212-313" v:mID="212" v:groupContext="shape" transform="translate(113.386,-130.394)">
+			<title>文字區塊 8pt.212</title>
+			<desc>KAN</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="13.1102" cy="831.26" width="26.23" height="21.2598"/>
+			<rect x="0" y="820.63" width="26.2205" height="21.2598" class="st12"/>
+			<text x="6.14" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>KAN</text>		</g>
+		<g id="shape213-316" v:mID="213" v:groupContext="shape" transform="translate(457.441,-130.394)">
+			<title>文字區塊 8pt.213</title>
+			<desc>Coeff</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="13.1102" cy="831.26" width="26.23" height="21.2598"/>
+			<rect x="0" y="820.63" width="26.2205" height="21.2598" class="st12"/>
+			<text x="4.44" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>Coeff</text>		</g>
+		<g id="shape214-319" v:mID="214" v:groupContext="shape" transform="translate(168.307,-307.559)">
+			<title>文字區塊 8pt.214</title>
+			<desc>Coeff</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="13.1102" cy="831.26" width="26.23" height="21.2598"/>
+			<rect x="0" y="820.63" width="26.2205" height="21.2598" class="st12"/>
+			<text x="4.44" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>Coeff</text>		</g>
+		<g id="shape215-322" v:mID="215" v:groupContext="shape" transform="translate(290.197,-307.559)">
+			<title>文字區塊 8pt.215</title>
+			<desc>Grid</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="10.2756" cy="831.26" width="20.56" height="21.2598"/>
+			<rect x="0" y="820.63" width="20.5512" height="21.2598" class="st12"/>
+			<text x="3.34" y="833.66" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>Grid</text>		</g>
+		<g id="shape216-325" v:mID="216" v:groupContext="shape" transform="translate(406.417,-358.583)">
+			<title>文字區塊 8pt.216</title>
+			<desc>KAN Linear</desc>
+			<v:userDefs>
+				<v:ud v:nameU="visVersion" v:val="VT0(15):26"/>
+			</v:userDefs>
+			<v:textBlock v:margins="rect(2,2,2,2)" v:tabSpace="42.5197"/>
+			<v:textRect cx="13.1102" cy="831.26" width="26.23" height="21.2598"/>
+			<rect x="0" y="820.63" width="26.2205" height="21.2598" class="st12"/>
+			<text x="6.14" y="828.86" class="st6" v:langID="1028"><v:paragraph v:horizAlign="1"/><v:tabList/>KAN <tspan x="3.11"
+						dy="1.2em" class="st8">Linear</tspan></text>		</g>
 	</g>
 </svg>
