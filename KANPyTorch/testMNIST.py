@@ -68,3 +68,19 @@ for epoch in range(10):
     print(
         f"Epoch {epoch + 1}, Val Loss: {val_loss}, Val Accuracy: {val_accuracy}"
     )
+
+# Print model weights
+print("Trained Model Weights:")
+
+for i, layer in enumerate(model.layers):
+    print(f"Layer {i + 1}:")
+    print("Spline Weights:")
+    print(layer.spline_weight)
+    print("Base Weights:")
+    print(layer.base_weight)
+    print()
+
+# Save model weights (need to create KAN instance then "torch.load")
+torch.save(model.state_dict(), "kan_mnist_weights.pth")
+# Save the entire model (just get with "torch.load")
+torch.save(model, "kan_mnist_model.pth")
