@@ -81,6 +81,6 @@ for i, layer in enumerate(model.layers):
     print()
 
 # Save model weights (need to create KAN instance then "torch.load")
-torch.save(model.state_dict(), "kan_mnist_weights.pth")
+torch.save(model.state_dict(), "model/kan_mnist_weights.pth")
 # Save the entire model (just get with "torch.load")
-torch.save(model, "kan_mnist_model.pth")
+torch.save(model, "model/kan_mnist_model.pth")

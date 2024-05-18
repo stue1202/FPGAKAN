@@ -1,14 +1,15 @@
 import torch
 import torch.nn as nn
 from tqdm import tqdm
+
 from EfficientKAN import KAN
 
 
 def test_mul():
-    kan = KAN([2, 2, 1], base_activation=nn.Identity)
+    kan = KAN([2, 3, 3, 1], base_activation=nn.Identity)
     optimizer = torch.optim.LBFGS(kan.parameters(), lr=0.001)
 
-    with tqdm(range(100)) as pbar:
+    with tqdm(range(200)) as pbar:
         for i in pbar:
             loss, reg_loss = None, None
 
@@ -30,6 +31,9 @@ def test_mul():
 
     for layer in kan.layers:
         print(layer.spline_weight)
+
+    torch.save(kan, 'model/kan_multiple_model.pth')
+    torch.save(kan.state_dict(), "model/kan_multiple_weights.pth")
 
     # Test the trained model
     test_model(kan)
