@@ -21,7 +21,7 @@ def test_mul():
                 nonlocal loss, reg_loss
                 u = x[:, 0]
                 v = x[:, 1]
-                loss = nn.functional.mse_loss(y.squeeze(-1), (u + v) / (1 + u * v))
+                loss = nn.functional.mse_loss(y.squeeze(-1), u * v)
                 reg_loss = kan.regularization_loss(1, 0)
                 (loss + 1e-5 * reg_loss).backward()
                 return loss + reg_loss
@@ -46,7 +46,7 @@ def test_model(model):
         test_y = model(test_x)
         u = test_x[:, 0]
         v = test_x[:, 1]
-        expected_y = (u + v) / (1 + u * v)
+        expected_y = u * v
         test_loss = nn.functional.mse_loss(test_y.squeeze(-1), expected_y)
         print(f"Test Loss: {test_loss.item():.4f}")
 
