@@ -36,6 +36,18 @@ def quantize_tensor(tensor, num_bits):
     return quantized_tensor, scale, zero_point
 
 
+# 將浮點數轉換為二進制字符串
+def float_to_binary(value):
+    import struct
+    [d] = struct.unpack(">Q", struct.pack(">d", value))
+    return f'{d:064b}'
+
+
+# 將整數轉換為二進制字符串
+def int_to_binary(value, num_bits):
+    return f'{value:0{num_bits}b}'
+
+
 # 將權重保存到單獨的 TXT 檔案
 def save_layer_weights_to_txt(model, layer_index, base_dir, num_bits):
     layer = model.layers[layer_index]
@@ -49,26 +61,26 @@ def save_layer_weights_to_txt(model, layer_index, base_dir, num_bits):
     with open(base_weight_file, 'w') as f:
         base_weight_data = layer.base_weight.detach().cpu().numpy()
         quantized_base_weight, scale, zero_point = quantize_tensor(torch.tensor(base_weight_data), num_bits)
-        f.write(f"scale: {scale}\n")
-        f.write(f"zero_point: {zero_point}\n")
+        f.write(f"{float_to_binary(scale)}\n")
+        f.write(f"{int_to_binary(zero_point, num_bits)}\n")
         for value in quantized_base_weight.flatten():
-            f.write(f'{value}\n')
+            f.write(f'{int_to_binary(value, num_bits)}\n')
 
     with open(spline_weight_file, 'w') as f:
         spline_weight_data = layer.spline_weight.detach().cpu().numpy()
         quantized_spline_weight, scale, zero_point = quantize_tensor(torch.tensor(spline_weight_data), num_bits)
-        f.write(f"scale: {scale}\n")
-        f.write(f"zero_point: {zero_point}\n")
+        f.write(f"{float_to_binary(scale)}\n")
+        f.write(f"{int_to_binary(zero_point, num_bits)}\n")
         for value in quantized_spline_weight.flatten():
-            f.write(f'{value}\n')
+            f.write(f'{int_to_binary(value, num_bits)}\n')
 
     with open(spline_scaler_file, 'w') as f:
         spline_scaler_data = layer.spline_scaler.detach().cpu().numpy()
         quantized_spline_scaler, scale, zero_point = quantize_tensor(torch.tensor(spline_scaler_data), num_bits)
-        f.write(f"scale: {scale}\n")
-        f.write(f"zero_point: {zero_point}\n")
+        f.write(f"{float_to_binary(scale)}\n")
+        f.write(f"{int_to_binary(zero_point, num_bits)}\n")
         for value in quantized_spline_scaler.flatten():
-            f.write(f'{value}\n')
+            f.write(f'{int_to_binary(value, num_bits)}\n')
 
 
 # 呼叫函數保存每層的權重，使用16位、8位和4位量化和其他位數
@@ -90,24 +102,32 @@ def load_quantized_weights_from_txt(model, layer_index, base_dir, num_bits):
     spline_weight_file = os.path.join(folder_name, f"layer{layer_index}_spline_weight.txt")
     spline_scaler_file = os.path.join(folder_name, f"layer{layer_index}_spline_scaler.txt")
 
-    def read_quantized_file(file_path):
+    def binary_to_float(binary_str):
+        import struct
+        bf = int(binary_str, 2)
+        return struct.unpack(">d", struct.pack(">Q", bf))[0]
+
+    def binary_to_int(binary_str):
+        return int(binary_str, 2)
+
+    def read_quantized_file(file_path, num_bits):
         with open(file_path, 'r') as f:
             lines = f.readlines()
-        scale = float(lines[0].strip().split(": ")[1])
-        zero_point = int(lines[1].strip().split(": ")[1])
-        quantized_values = np.array([int(v.strip()) for v in lines[2:]])
+        scale = binary_to_float(lines[0].strip())
+        zero_point = binary_to_int(lines[1].strip())
+        quantized_values = np.array([binary_to_int(v.strip()) for v in lines[2:]])
         return quantized_values, scale, zero_point
 
-    quantized_base_weight, scale, zero_point = read_quantized_file(base_weight_file)
+    quantized_base_weight, scale, zero_point = read_quantized_file(base_weight_file, num_bits)
     layer.base_weight.data = torch.tensor((quantized_base_weight - zero_point) * scale, dtype=torch.float32).view_as(
         layer.base_weight)
 
-    quantized_spline_weight, scale, zero_point = read_quantized_file(spline_weight_file)
+    quantized_spline_weight, scale, zero_point = read_quantized_file(spline_weight_file, num_bits)
     layer.spline_weight.data = torch.tensor((quantized_spline_weight - zero_point) * scale,
                                             dtype=torch.float32).view_as(layer.spline_weight)
 
     if os.path.exists(spline_scaler_file):
-        quantized_spline_scaler, scale, zero_point = read_quantized_file(spline_scaler_file)
+        quantized_spline_scaler, scale, zero_point = read_quantized_file(spline_scaler_file, num_bits)
         layer.spline_scaler.data = torch.tensor((quantized_spline_scaler - zero_point) * scale,
                                                 dtype=torch.float32).view_as(layer.spline_scaler)
 
