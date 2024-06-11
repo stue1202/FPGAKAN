@@ -67,9 +67,9 @@ def save_layer_weights_to_txt(model, layer_index, base_dir, num_bits):
         for value in quantized_base_weight.flatten():
             f.write(f'{int_to_binary(value, num_bits)}\n')
     with open(base_weight_scale_file, 'w') as f:
-        f.write(f"{float_to_binary(scale)}\n")
+        f.write(f"{scale}\n")
     with open(base_weight_zero_point_file, 'w') as f:
-        f.write(f"{int_to_binary(zero_point, num_bits)}\n")
+        f.write(f"{zero_point}\n")
 
     with open(spline_weight_file, 'w') as f:
         spline_weight_data = layer.spline_weight.detach().cpu().numpy()
@@ -77,9 +77,9 @@ def save_layer_weights_to_txt(model, layer_index, base_dir, num_bits):
         for value in quantized_spline_weight.flatten():
             f.write(f'{int_to_binary(value, num_bits)}\n')
     with open(spline_weight_scale_file, 'w') as f:
-        f.write(f"{float_to_binary(scale)}\n")
+        f.write(f"{scale}\n")
     with open(spline_weight_zero_point_file, 'w') as f:
-        f.write(f"{int_to_binary(zero_point, num_bits)}\n")
+        f.write(f"{zero_point}\n")
 
     with open(spline_scaler_file, 'w') as f:
         spline_scaler_data = layer.spline_scaler.detach().cpu().numpy()
@@ -87,9 +87,9 @@ def save_layer_weights_to_txt(model, layer_index, base_dir, num_bits):
         for value in quantized_spline_scaler.flatten():
             f.write(f'{int_to_binary(value, num_bits)}\n')
     with open(spline_scaler_scale_file, 'w') as f:
-        f.write(f"{float_to_binary(scale)}\n")
+        f.write(f"{scale}\n")
     with open(spline_scaler_zero_point_file, 'w') as f:
-        f.write(f"{int_to_binary(zero_point, num_bits)}\n")
+        f.write(f"{zero_point}\n")
 
 # 從 TXT 文件加載量化後的權重
 def binary_to_float(binary_str):
@@ -109,7 +109,7 @@ def read_quantized_file(file_path, num_bits):
 def read_scale_zero_point(file_path, is_float):
     with open(file_path, 'r') as f:
         value = f.readline().strip()
-    return binary_to_float(value) if is_float else binary_to_int(value)
+    return float(value) if is_float else int(value)
 
 def load_quantized_weights_from_txt(model, layer_index, base_dir, num_bits):
     layer = model.layers[layer_index]
