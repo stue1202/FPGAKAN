@@ -1,10 +1,9 @@
+import os
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.quantization
-import numpy as np
-import os
-
-from EfficientKAN import KAN
 
 
 def quantize_model(model_path, model_weights_path):
@@ -17,26 +16,25 @@ def quantize_model(model_path, model_weights_path):
     model.eval()
 
     # 設置量化配置為INT8
-    model.qconfig = torch.quantization.QConfig(
-        activation=torch.quantization.MinMaxObserver.with_args(dtype=torch.quint8, quant_min=0, quant_max=255),
-        weight=torch.quantization.PerChannelMinMaxObserver.with_args(dtype=torch.qint8, quant_min=-128, quant_max=127)
-    )
+    model.qconfig = torch.quantization.default_qconfig
 
     # 準備模型進行量化
-    torch.quantization.prepare(model, inplace=True)
+    torch.quantization.prepare(model, inplace=False)
 
     # 使用校準數據進行量化校準
     calibrate_model(model)
 
     # 轉換為量化模型
-    torch.quantization.convert(model, inplace=True)
+    torch.quantization.convert(model, inplace=False)
 
     # 保存量化後的模型
-    torch.save(model, 'model/kan_multiple_model_quantized.pth')
     torch.save(model.state_dict(), "model/kan_multiple_weights_quantized.pth")
+    torch.save(model, 'model/kan_multiple_model_quantized.pth')
 
     # 導出量化後的權重
     export_weights_to_csv(model, "model/quantized_weights")
+
+    # print(model.state_dict())
 
     # 測試量化後的模型
     test_model(model)
