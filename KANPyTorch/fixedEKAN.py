@@ -6,8 +6,8 @@ import torch.quantization
 
 
 def quantize_tensor(tensor, num_bits):
-    qmin = 0.
-    qmax = 2. ** num_bits - 1.
+    qmin = 0.0
+    qmax = 2.0**num_bits - 1.0
 
     min_val, max_val = tensor.min(), tensor.max()
     scale = (max_val - min_val) / (qmax - qmin)
@@ -42,7 +42,7 @@ def quantize_model(model_path, model_weights_path, num_bits):
 
     # 保存量化後的模型
     torch.save(model.state_dict(), "model/kan_multiple_weights_quantized.pth")
-    torch.save(model, 'model/kan_multiple_model_quantized.pth')
+    torch.save(model, "model/kan_multiple_model_quantized.pth")
 
     # 導出量化後的權重
     export_weights_to_csv(model, "model/quantized_weights", num_bits)
@@ -97,7 +97,7 @@ def read_convert_and_write_binary(folder_path, num_bits):
             # 將數據轉換為二進制格式
             binary_data = np.vectorize(np.binary_repr)(data.astype(int), width=num_bits)
             # 將二進制數據寫回CSV文件
-            with open(file_path, 'w') as f:
+            with open(file_path, "w") as f:
                 for binary_value in binary_data:
                     f.write(f"{binary_value}\n")
             print(f"Binary values written to {file_name}")
@@ -108,8 +108,8 @@ if __name__ == "__main__":
     num_bits = int(input("請輸入量化寬度 (例如 8): "))
 
     # 使用訓練好的模型路徑和權重文件路徑
-    model_path = 'model/kan_multiple_model.pth'
-    model_weights_path = 'model/kan_multiple_weights.pth'
+    model_path = "model/kan_multiple_model.pth"
+    model_weights_path = "model/kan_multiple_weights.pth"
 
     quantize_model(model_path, model_weights_path, num_bits)
 

@@ -45,7 +45,11 @@ for epoch in range(10):
             loss.backward()
             optimizer.step()
             accuracy = (output.argmax(dim=1) == labels.to(device)).float().mean()
-            pbar.set_postfix(loss=loss.item(), accuracy=accuracy.item(), lr=optimizer.param_groups[0]['lr'])
+            pbar.set_postfix(
+                loss=loss.item(),
+                accuracy=accuracy.item(),
+                lr=optimizer.param_groups[0]["lr"],
+            )
 
     # Validation
     model.eval()
@@ -65,9 +69,7 @@ for epoch in range(10):
     # Update learning rate
     scheduler.step()
 
-    print(
-        f"Epoch {epoch + 1}, Val Loss: {val_loss}, Val Accuracy: {val_accuracy}"
-    )
+    print(f"Epoch {epoch + 1}, Val Loss: {val_loss}, Val Accuracy: {val_accuracy}")
 
 # Print model weights
 print("Trained Model Weights:")

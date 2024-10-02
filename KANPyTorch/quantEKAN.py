@@ -29,7 +29,7 @@ def quantize_model(model_path, model_weights_path):
 
     # 保存量化後的模型
     torch.save(model.state_dict(), "model/kan_multiple_weights_quantized.pth")
-    torch.save(model, 'model/kan_multiple_model_quantized.pth')
+    torch.save(model, "model/kan_multiple_model_quantized.pth")
 
     # 導出量化後的權重
     export_weights_to_csv(model, "model/quantized_weights")
@@ -74,7 +74,7 @@ def export_weights_to_csv(model, folder_path):
 
 
 # 使用訓練好的模型路徑和權重文件路徑
-model_path = 'model/kan_multiple_model.pth'
-model_weights_path = 'model/kan_multiple_weights.pth'
+model_path = "model/kan_multiple_model.pth"
+model_weights_path = "model/kan_multiple_weights.pth"
 
 quantize_model(model_path, model_weights_path)

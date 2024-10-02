@@ -32,7 +32,7 @@ def test_mul():
     for layer in kan.layers:
         print(layer.spline_weight)
 
-    torch.save(kan, 'model/kan_multiple_model.pth')
+    torch.save(kan, "model/kan_multiple_model.pth")
     torch.save(kan.state_dict(), "model/kan_multiple_weights.pth")
 
     # Test the trained model
