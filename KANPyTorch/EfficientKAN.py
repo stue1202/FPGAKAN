@@ -262,7 +262,7 @@ class KAN(torch.nn.Module):
                     base_activation=base_activation,
                     grid_eps=grid_eps,
                     grid_range=grid_range,
-                    dtype=dtype,  # 傳遞 dtype 參數
+                    dtype=dtype,
                 )
             )
         return layers
