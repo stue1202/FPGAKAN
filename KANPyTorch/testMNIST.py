@@ -24,8 +24,6 @@ valloader = DataLoader(valset, batch_size=64, shuffle=False)
 
 # Define model
 model = KAN([28 * 28, 64, 10])
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-model.to(device)
 # Define optimizer
 optimizer = optim.AdamW(model.parameters(), lr=1e-3, weight_decay=1e-4)
 # Define learning rate scheduler
@@ -38,13 +36,13 @@ for epoch in range(10):
     model.train()
     with tqdm(trainloader) as pbar:
         for i, (images, labels) in enumerate(pbar):
-            images = images.view(-1, 28 * 28).to(device)
+            images = images.view(-1, 28 * 28)
             optimizer.zero_grad()
             output = model(images)
-            loss = criterion(output, labels.to(device))
+            loss = criterion(output, labels)
             loss.backward()
             optimizer.step()
-            accuracy = (output.argmax(dim=1) == labels.to(device)).float().mean()
+            accuracy = (output.argmax(dim=1) == labels).float().mean()
             pbar.set_postfix(
                 loss=loss.item(),
                 accuracy=accuracy.item(),
@@ -57,11 +55,11 @@ for epoch in range(10):
     val_accuracy = 0
     with torch.no_grad():
         for images, labels in valloader:
-            images = images.view(-1, 28 * 28).to(device)
+            images = images.view(-1, 28 * 28)
             output = model(images)
-            val_loss += criterion(output, labels.to(device)).item()
+            val_loss += criterion(output, labels).item()
             val_accuracy += (
-                (output.argmax(dim=1) == labels.to(device)).float().mean().item()
+                (output.argmax(dim=1) == labels).float().mean().item()
             )
     val_loss /= len(valloader)
     val_accuracy /= len(valloader)
