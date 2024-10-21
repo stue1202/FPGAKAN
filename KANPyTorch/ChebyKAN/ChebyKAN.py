@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 # 定義 ChebyKANLayer 類別
 class ChebyKANLayer(nn.Module):
     def __init__(self, input_dim, output_dim, degree):
@@ -30,6 +31,7 @@ class ChebyKANLayer(nn.Module):
         y = torch.einsum("bid,iod->bo", x, self.cheby_coeffs)
         y = y.view(-1, self.outdim)
         return y
+
 
 # 定義 KAN 類別
 class KAN(nn.Module):

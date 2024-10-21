@@ -58,9 +58,7 @@ for epoch in range(10):
             images = images.view(-1, 28 * 28)
             output = model(images)
             val_loss += criterion(output, labels).item()
-            val_accuracy += (
-                (output.argmax(dim=1) == labels).float().mean().item()
-            )
+            val_accuracy += (output.argmax(dim=1) == labels).float().mean().item()
     val_loss /= len(valloader)
     val_accuracy /= len(valloader)
 
