@@ -1,5 +1,3 @@
-from EfficientKAN import KAN
-
 # Train on MNIST
 import torch
 import torch.nn as nn
@@ -8,6 +6,8 @@ import torchvision
 import torchvision.transforms as transforms
 from torch.utils.data import DataLoader
 from tqdm import tqdm
+
+from EfficientKAN import KAN
 
 # Load MNIST
 transform = transforms.Compose(
