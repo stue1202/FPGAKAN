@@ -144,6 +144,7 @@ class KANLinear(torch.nn.Module):
         return F.linear(self.base_activation(x), self.base_weight)
 
     def compute_spline_output(self, x: torch.Tensor):
+        print("testing:",self.b_splines(x).shape)
         return F.linear(
             self.b_splines(x).view(x.size(0), -1),
             self.scaled_spline_weight.view(self.out_features, -1),
@@ -237,7 +238,6 @@ class KAN(torch.nn.Module):
             grid_range,
             dtype,
         )
-
     def build_layers(
         self,
         layers_hidden,

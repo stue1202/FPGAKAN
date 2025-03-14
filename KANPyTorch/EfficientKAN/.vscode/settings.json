@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "dense": "cpp",
+        "vector": "cpp",
+        "core": "cpp",
+        "cholesky": "cpp",
+        "hash_map": "cpp",
+        "iostream": "cpp"
+    }
+}

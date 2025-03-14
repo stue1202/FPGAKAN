@@ -34,10 +34,13 @@ def test_mul():
 
     torch.save(kan, "model/kan_multiple_model.pth")
     torch.save(kan.state_dict(), "model/kan_multiple_weights.pth")
-
+    print("Model saved")
     # Test the trained model
     test_model(kan)
 
+def test_mul2():
+    kan=torch.load("model/kan_multiple_model.pth")
+    test_model(kan)
 
 def test_model(model):
     model.eval()
@@ -48,7 +51,9 @@ def test_model(model):
         v = test_x[:, 1]
         expected_y = u * v
         test_loss = nn.functional.mse_loss(test_y.squeeze(-1), expected_y)
-        print(f"Test Loss: {test_loss.item():.4f}")
+        print(f"real: {expected_y}")
+        print(f"predict: {test_y}")
+        print()
 
 
-test_mul()
+test_mul2()
