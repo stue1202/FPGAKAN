@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 from tqdm import tqdm
+import m2cgen as m2c
 
 from EfficientKAN import KAN
 
@@ -31,16 +32,17 @@ def test_mul():
 
     for layer in kan.layers:
         print(layer.spline_weight)
+    cpp_code = m2c.export_to_c(kan)
 
+# 儲存到檔案
+    with open("CKAN.cpp", "w") as f:
+        f.write(cpp_code)
     torch.save(kan, "model/kan_multiple_model.pth")
     torch.save(kan.state_dict(), "model/kan_multiple_weights.pth")
     print("Model saved")
     # Test the trained model
     test_model(kan)
 
-def test_mul2():
-    kan=torch.load("model/kan_multiple_model.pth")
-    test_model(kan)
 
 def test_model(model):
     model.eval()
@@ -56,4 +58,4 @@ def test_model(model):
         print()
 
 
-test_mul2()
+test_mul()

@@ -61,6 +61,7 @@ class KANLinear(torch.nn.Module):
             .expand(self.in_features, -1)
             .contiguous()
         )
+        print("grid: ",grid)
         return grid
 
     def initialize_weights(
@@ -101,9 +102,13 @@ class KANLinear(torch.nn.Module):
         grid: torch.Tensor = (
             self.grid
         )  # (in_features, grid_size + 2 * spline_order + 1)
+        print("grid: ",grid.shape)
+        print("x: ",x.shape)
+
         x = x.unsqueeze(-1)
         bases = ((x >= grid[:, :-1]) & (x < grid[:, 1:])).to(x.dtype)
         for k in range(1, self.spline_order + 1):
+            print("bases: ",bases.shape)
             bases = (
                 (x - grid[:, : -(k + 1)])
                 / (grid[:, k:-1] - grid[:, : -(k + 1)])
@@ -113,6 +118,7 @@ class KANLinear(torch.nn.Module):
                 / (grid[:, k + 1 :] - grid[:, 1:(-k)])
                 * bases[:, :, 1:]
             )
+        print("bases: ",bases.shape)
         return bases
 
     def curve2coeff(self, x: torch.Tensor, y: torch.Tensor):

@@ -1,14 +1,3 @@
-#include <cmath>
-#include <iostream>
-using namespace std;
-typedef float fixed_t;
-int grid_size=5;
-int spline_order=3;
-float scale_base=1.0;
-float scale_spline=1.0;
-int enable_standalone_scale_spline=1;
-float grid_eps=0.02;
-int grid_range[2]={-1, 1};
 struct fpgaARR
 {
     float *arr;
@@ -22,12 +11,6 @@ struct fpgaARR
     }
     int len() {
         return this->dim1*this->dim2*this->dim3;
-    }
-    float get(int i, int j, int k) const {
-        return arr[i * dim2 * dim1 + j * dim1 + k];
-    }
-    void set(int i, int j, int k,float value) const {
-        arr[i * dim2 * dim1 + j * dim1 + k]=value;
     }
     fpgaARR(float *arr, int dim3, int dim2, int dim1) : arr(arr), dim1(dim1), dim2(dim2), dim3(dim3) {}
 };
@@ -88,75 +71,3 @@ fpgaARR layers_2_spline_scaler = {
     new float[1 * 3] {0.4120, 0.1307, -0.4507},
     1, 3, 1
 };
-
-void silu(fpgaARR &x){
-    for(int i=0;i<x.len();i++){
-        x.arr[i] = x.arr[i] / (1.0 + exp(-x.arr[i]));
-    }
-}
-void printarr(fpgaARR grid){
-    printf("dim1: %d, dim2: %d\n", grid.dim1, grid.dim2);
-    for (int i = 0; i < grid.dim2; ++i) {
-        for (int j = 0; j < grid.dim1; ++j) {
-            cout << grid.arr[i * grid.dim1 + j] << " ";
-        }
-    cout << endl;
-    }
-}
-fpgaARR linear(fpgaARR x,fpgaARR weight){//限定二维
-    if(x.dim1==weight.dim1){
-        float tmp[weight.dim2*x.dim2]={0};
-        fpgaARR output(tmp,1,x.dim2,weight.dim2);
-        for (int i = 0; i < x.dim2; ++i) {
-            for (int j = 0; j < weight.dim2; ++j) {
-                for (int k = 0; k < x.dim1; ++k) {
-                    output.arr[i*output.dim1+j]+=x.arr[i*x.dim1+k]*weight.arr[j*weight.dim1+k];
-                    cout<<x.arr[i*x.dim1+k] <<" "<<weight.arr[j*weight.dim1+k]<<endl;
-                }
-            }
-        }
-        printarr(output);
-        return output;
-    }
-}
-fpgaARR build_grid(const int grid_range[2], const int grid_size,const int spline_order) {
-    float tmp[grid_size + 2 * spline_order + 1];
-    fpgaARR grid(tmp,1,1,grid_size + 2 * spline_order + 1);
-    float h = (grid_range[1] - grid_range[0]) / (float)grid_size;
-    for (int i = -spline_order; i <= grid_size + spline_order + 1; ++i) {
-        grid.arr[i+spline_order] = i * h + grid_range[0];
-    }
-    printarr(grid);
-    return grid;
-}
-fpgaARR addarr(fpgaARR x,fpgaARR y){
-    if(x.dim1==y.dim1&&x.dim2==y.dim2){
-        float tmp[x.len()]={0};
-        fpgaARR output(tmp,1,x.dim2,x.dim1);
-        for (int i = 0; i < x.dim2; ++i) {
-            for (int j = 0; j < x.dim1; ++j) {
-                output.arr[i*output.dim1+j]=x.arr[i*x.dim1+j]+y.arr[i*x.dim1+j];
-            }
-        }
-        printarr(output);
-        return output;
-    }
-}
-fpgaARR KanLayer(fpgaARR &x) {
-    build_grid(grid_range, grid_size, spline_order);
-    silu(x);
-    return addarr(linear(x, layers_0_base_weight),linear(b_splines(x).view(),layers_0_spline_weight.view()));
-}
-fpgaARR KAN(fpgaARR &x,int hiden_layers_number){
-    for(int i=0;i<hiden_layers_number;i++){
-        KanLayer(x);
-    }
-}
-int main(){
-    int arr2D[2] = {-1,1}; // Create 2D array.
-    float arr1D[5] = {1, 2, 6, 4, 5}; // Create 1D array.
-    fpgaARR x(arr1D, 1,1,5);
-    float arr2D2[5] = {1, 2, 3, 4, 5}; // Create 2D array.
-    fpgaARR weight(arr2D2, 1,1,5);
-    return 0;
-}

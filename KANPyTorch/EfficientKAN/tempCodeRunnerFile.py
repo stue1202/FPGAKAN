@@ -1,1 +1,1 @@
-print("Final Shape of bases:", b_spline_bases.shape)
+test_x

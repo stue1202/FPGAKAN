@@ -13,6 +13,8 @@ except TypeError:
 
 # 輸出權重名稱與形狀
 print("\n模型權重列表:")
-for name, param in model_state_dict.items():
-    print(f"{name}: {param.shape}")
-    print(param, "\n")
+with open("weight.txt", "w") as f:
+    for name, param in model_state_dict.items():
+        f.write(f"{name}: {param.shape}")
+        for i in param:
+            f.write(str(i))

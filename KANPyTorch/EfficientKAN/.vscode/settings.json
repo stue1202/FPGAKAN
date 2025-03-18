@@ -5,6 +5,8 @@
         "core": "cpp",
         "cholesky": "cpp",
         "hash_map": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "new": "cpp",
+        "ostream": "cpp"
     }
 }
