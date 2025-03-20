@@ -1,44 +1,61 @@
-
 #include <iostream>
 using namespace std;
-typedef float fixed_t;
-
-struct fpgaARR
+class Point
 {
-    float *arr;
-    int dim;
-    int dim1;
-    int dim2;
-    int dim3;
+public:
+    Point(){x=0.;y=0.;z=0.;};
+    // copy operator
+    Point operator=(const Point &pt) ;
+    Point operator+(const Point &pt) const;
+    //Point operator-(const Point &pt) const;
+    Point operator*(double m) const;
+    Point operator/(double m) const;
+    double x,y,z;
 };
-void build_grid(const int grid_range[2], const int grid[IN_FEATURES * (GRID_SIZE + 2 * SPLINE_ORDER + 1)]) {
-    T h = (grid_range[1] - grid_range[0]) / GRID_SIZE;
-
-    for (int i = 0; i < IN_FEATURES; ++i) {
-        for (int j = -SPLINE_ORDER; j <= GRID_SIZE + SPLINE_ORDER; ++j) {
-            grid[i * (GRID_SIZE + 2 * SPLINE_ORDER + 1) + (j + SPLINE_ORDER)] = j * h + grid_range[0];
-        }
-    }
-}
-template<typename T,size_t row,size_t col>
-void fnPrint2DArray(T (&arr)[row][col])
+ 
+Point Point::operator=(const Point &pt)
 {
-    for(size_t i=0;i<row;++i)
+    x = pt.x;
+    y = pt.y;
+    z = pt.z;
+    return *this;
+}
+Point Point::operator+(const Point &pt) const
+{
+    Point temp;
+    temp.x = x + pt.x;
+    temp.y = y + pt.y;
+    temp.z = z + pt.z;
+    return temp;
+}
+Point Point::operator*(double m) const
+{
+    Point temp;
+    temp.x = x*m;
+    temp.y = y*m;
+    temp.z = z*m;
+    return temp;
+}
+Point Point::operator/(double m) const
+{
+    Point temp;
+    temp.x = x/m;
+    temp.y = y/m;
+    temp.z = z/m;
+    return temp;
+}
+Point deBoor(int k,int degree, int i, double x, double* knots, Point *ctrlPoints)
+{   
+    if( k == 0)
+        return ctrlPoints[i];
+    else
     {
-        for(size_t j=0; j<col; ++j)
-        {
-            cout << arr[i][j] << " ";
-        }
-        cout << endl;
+        double alpha = (x-knots[i])/(knots[i+degree+1-k]-knots[i]);
+        return (deBoor(k-1,degree, i-1, x, knots, ctrlPoints)*(1-alpha )+deBoor(k-1,degree, i, x, knots, ctrlPoints)*alpha );
     }
 }
 
-
-int main(int argc, char * argv[])
-{
-    int arr2D[2][2] = { {1,2},{3,4}}; // Create 2D array.
-    int B[2][2] = { {1,2},{3,4}}; // Create 2D array.
-    fnPrint2DArray(arr2D);
-    cout<<B[0][0]<<endl;
+int main() {
+   deBoor(3, 2, 3, 0.5,);
     return 0;
 }

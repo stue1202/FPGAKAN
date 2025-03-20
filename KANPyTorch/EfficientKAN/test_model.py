@@ -6,7 +6,7 @@ from EfficientKAN import KAN
 
 
 def test_mul():
-    kan=torch.load("model/kan_multiple_model.pth")
+    kan=torch.load("model/kan_multiple_model.pth",weights_only=False)
     test_model(kan)
 
 def test_model(model):

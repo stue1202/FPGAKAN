@@ -2,13 +2,14 @@
 #include <iostream>
 using namespace std;
 typedef float fixed_t;
-int grid_size=5;
-int spline_order=3;
-float scale_base=1.0;
-float scale_spline=1.0;
-int enable_standalone_scale_spline=1;
-float grid_eps=0.02;
-int grid_range[2]={-1, 1};
+const int grid_size=5;
+const int spline_order=3;
+const float scale_base=1.0;
+const float scale_spline=1.0;
+const int enable_standalone_scale_spline=1;
+const float grid_eps=0.02;
+const int grid_range[2]={-1, 1};
+const int hiden_layers=3;
 struct fpgaARR
 {
     float *arr;
@@ -30,6 +31,21 @@ struct fpgaARR
         arr[i * dim2 * dim1 + j * dim1 + k]=value;
     }
     fpgaARR(float *arr, int dim3, int dim2, int dim1) : arr(arr), dim1(dim1), dim2(dim2), dim3(dim3) {}
+};
+fpgaARR layers_base_weight[hiden_layers]={
+    layers_0_base_weight,
+    layers_1_base_weight,
+    layers_2_base_weight
+};
+fpgaARR layers_spline_weight[hiden_layers]={
+    layers_0_spline_weight,
+    layers_1_spline_weight,
+    layers_2_spline_weight
+};
+fpgaARR layers_spline_scaler[hiden_layers]={
+    layers_0_spline_scaler,
+    layers_1_spline_scaler,
+    layers_2_spline_scaler
 };
 fpgaARR layers_0_base_weight = {
     new float[3 * 2] {-0.6335, -0.2360, -0.6080, -0.3417, 0.6330, 0.5733},
@@ -104,9 +120,10 @@ void printarr(fpgaARR grid){
     }
 }
 fpgaARR linear(fpgaARR x,fpgaARR weight){//限定二维
+    float tmp[weight.dim2*x.dim2]={0};
+    fpgaARR output(tmp,1,x.dim2,weight.dim2);
     if(x.dim1==weight.dim1){
-        float tmp[weight.dim2*x.dim2]={0};
-        fpgaARR output(tmp,1,x.dim2,weight.dim2);
+
         for (int i = 0; i < x.dim2; ++i) {
             for (int j = 0; j < weight.dim2; ++j) {
                 for (int k = 0; k < x.dim1; ++k) {
@@ -115,9 +132,10 @@ fpgaARR linear(fpgaARR x,fpgaARR weight){//限定二维
                 }
             }
         }
-        printarr(output);
-        return output;
+        
     }
+    printarr(output);
+    return output;
 }
 fpgaARR build_grid(const int grid_range[2], const int grid_size,const int spline_order) {
     float tmp[grid_size + 2 * spline_order + 1];
@@ -128,6 +146,44 @@ fpgaARR build_grid(const int grid_range[2], const int grid_size,const int spline
     }
     printarr(grid);
     return grid;
+}
+fpgaARR b_splines(fpgaARR &x){
+    fpgaARR grid=build_grid(grid_range, grid_size, spline_order);
+    float tmp[x.len()*grid.len()]={0};
+    fpgaARR bases(tmp,x.dim1,x.dim2,grid.len());
+    int index=0;
+    for (int i = 0; i < x.dim3; ++i) {
+        for (int j = 0; j < x.dim2; ++j) {
+            for (int k = 0; k < x.dim1; ++k) {
+                float x= x.arr[k];
+                for(int l=0;l<grid.len();l++){
+                    if(x>=grid.arr[l]&&x<grid.arr[l+1]){
+                        bases.arr[index]=1;
+                    }else{
+                        bases.arr[index]=0;
+                    }
+                    index++;
+                }
+            }
+        }
+    }
+
+    for(int t=1;t<=spline_order;t++){
+        for(int g=0;g<grid.len();g++){
+            for (int i = 0; i < x.dim3; ++i) {
+                for (int j = 0; j < x.dim2; ++j) {
+                    for (int k = 0; k < x.dim1-1; ++k) {
+                        float x= x.arr[k];
+                        bases.arr[index]=x-grid.arr[g]/(grid.arr[g+t]-grid.arr[g])*bases.arr[index-1] + (grid.arr[g+t+1]-x)/(grid.arr[g+t+1]-grid.arr[g+1])*bases.arr[index];
+                        index++;
+                    }
+                }
+            }
+        }
+        index=0;
+        bases.dim1--;
+    }
+    return bases;
 }
 fpgaARR addarr(fpgaARR x,fpgaARR y){
     if(x.dim1==y.dim1&&x.dim2==y.dim2){
@@ -142,17 +198,17 @@ fpgaARR addarr(fpgaARR x,fpgaARR y){
         return output;
     }
 }
-fpgaARR KanLayer(fpgaARR &x) {
-     silu(x);
-    return addarr(linear(x, layers_0_base_weight),linear(b_splines(x).view(),layers_0_spline_weight.view()));
+fpgaARR KanLayer(fpgaARR &x,int layer_now){
+    build_grid(grid_range, grid_size, spline_order);
+    silu(x);
+    return addarr(linear(x, layers_base_weight[layer_now]),linear(b_splines(x).view(),layers_spline_weight[layer_now].view()));
 }
 void KAN(fpgaARR &x,int hiden_layers_number){
     for(int i=0;i<hiden_layers_number;i++){
-        KanLayer(x);
+        KanLayer(x,i);
     }
 }
 int main(){
-    int arr2D[2] = {-1,1}; // Create 2D array.
     float arr1D[5] = {1, 2, 6, 4, 5}; // Create 1D array.
     fpgaARR x(arr1D, 1,1,5);
     float arr2D2[5] = {1, 2, 3, 4, 5}; // Create 2D array.
