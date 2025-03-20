@@ -32,11 +32,8 @@ def test_mul():
 
     for layer in kan.layers:
         print(layer.spline_weight)
-    cpp_code = m2c.export_to_c(kan)
 
 # 儲存到檔案
-    with open("CKAN.cpp", "w") as f:
-        f.write(cpp_code)
     torch.save(kan, "model/kan_multiple_model.pth")
     torch.save(kan.state_dict(), "model/kan_multiple_weights.pth")
     print("Model saved")

@@ -61,7 +61,7 @@ class KANLinear(torch.nn.Module):
             .expand(self.in_features, -1)
             .contiguous()
         )
-        print("grid: ",grid)
+        print("grid: in",grid)
         return grid
 
     def initialize_weights(
@@ -102,13 +102,13 @@ class KANLinear(torch.nn.Module):
         grid: torch.Tensor = (
             self.grid
         )  # (in_features, grid_size + 2 * spline_order + 1)
-        print("grid: ",grid.shape)
-        print("x: ",x.shape)
+        print("grid: ",grid.shape,grid)
+        print("x: ",x.shape,x)
 
         x = x.unsqueeze(-1)
         bases = ((x >= grid[:, :-1]) & (x < grid[:, 1:])).to(x.dtype)
         for k in range(1, self.spline_order + 1):
-            print("bases: ",bases.shape)
+            print("bases inside: ",bases.shape,bases)
             bases = (
                 (x - grid[:, : -(k + 1)])
                 / (grid[:, k:-1] - grid[:, : -(k + 1)])
@@ -118,7 +118,7 @@ class KANLinear(torch.nn.Module):
                 / (grid[:, k + 1 :] - grid[:, 1:(-k)])
                 * bases[:, :, 1:]
             )
-        print("bases: ",bases.shape)
+        print("bases: ",bases.shape,bases)
         return bases
 
     def curve2coeff(self, x: torch.Tensor, y: torch.Tensor):
@@ -150,7 +150,7 @@ class KANLinear(torch.nn.Module):
         return F.linear(self.base_activation(x), self.base_weight)
 
     def compute_spline_output(self, x: torch.Tensor):
-        print("testing:",self.b_splines(x).shape)
+        #print("testing:",self.b_splines(x).shape)
         return F.linear(
             self.b_splines(x).view(x.size(0), -1),
             self.scaled_spline_weight.view(self.out_features, -1),
