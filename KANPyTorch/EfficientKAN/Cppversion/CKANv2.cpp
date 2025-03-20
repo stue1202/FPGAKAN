@@ -143,11 +143,10 @@ fpgaARR addarr(fpgaARR x,fpgaARR y){
     }
 }
 fpgaARR KanLayer(fpgaARR &x) {
-    build_grid(grid_range, grid_size, spline_order);
-    silu(x);
+     silu(x);
     return addarr(linear(x, layers_0_base_weight),linear(b_splines(x).view(),layers_0_spline_weight.view()));
 }
-fpgaARR KAN(fpgaARR &x,int hiden_layers_number){
+void KAN(fpgaARR &x,int hiden_layers_number){
     for(int i=0;i<hiden_layers_number;i++){
         KanLayer(x);
     }
