@@ -128,7 +128,7 @@ void printarr(const fpgaARR &p){
         cout << endl;
     }
 }
-fpgaARR linear(const fpgaARR &x,const fpgaARR &weight,const fpgaARR &x1,const fpgaARR &weight1){//限定二维
+fpgaARR linear(const fpgaARR &x,const fpgaARR &weight,const fpgaARR &x1,const fpgaARR &weight1){
     //float tmp[weight.dim2*x.dim2]={0};
     static float tmp[1024*1024]={0};
     fpgaARR output(tmp,1,x.dim2,weight.dim2);
@@ -217,7 +217,6 @@ void KanLayer(fpgaARR &x,int layer_now){
     silu(x);
     layers_spline_weight[layer_now].view();
     fpgaARR B=b_splines(x);
-    cout<<"ck1: "<<layer_now<<endl;
     x.shape();
     layers_base_weight[layer_now].shape();
     B.shape();
@@ -228,7 +227,6 @@ void KAN(fpgaARR &x,int hiden_layers_number){
     for(int i=0;i<hiden_layers_number;i++){
         KanLayer(x,i);
     }
-    
 }
 int main(){
     //random_test_data
@@ -246,6 +244,6 @@ int main(){
     //    printf("%f * %f = %f\n",x.arr[i*x.dim1+0],x.arr[i*x.dim1+1],x.arr[i*x.dim1+0]*x.arr[i*x.dim1+1]);        
     //}
     KAN(x,hiden_layers);
-    printarr(x);
+    //printarr(x);
     return 0;
 }
